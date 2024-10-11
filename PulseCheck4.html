@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header, footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .gallery {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    figure {
+      position: relative;
+      width: 300px;
+    }
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    figcaption {
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .image-actions {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+
+    .image-actions button {
+      background-color: #333;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .image-actions button:hover {
+      background-color: #555;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .counter {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    footer ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    footer ul li {
+      display: inline;
+      margin: 0 10px;
+    }
+
+    footer ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    #feedback-form {
+      margin-top: 20px;
+      text-align: left;
+      display: inline-block;
+      width: 300px;
+    }
+
+    #feedback-form label, select, textarea {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    select, textarea {
+      padding: 5px;
+      width: 100%;
+    }
+
+    textarea {
+      height: 100px;
+    }
+
+    #feature-request-form {
+      margin-top: 20px;
+    }
+
+    #feature-request-form button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #feature-request-form button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Image Gallery</h1>
+  </header>
+
+  <main>
+    <div class="gallery">
+      <!-- First image -->
+      <figure id="image-1">
+        <img src="https://shorturl.at/huvMb" alt="Image 1 Description">
+        <figcaption>Image 1 Caption</figcaption>
+        <div class="image-actions">
+          <button onclick="likeImage(1)">Like (<span id="like-count-1">0</span>)</button>
+          <button onclick="dislikeImage(1)">Dislike (<span id="dislike-count-1">0</span>)</button>
+          <button onclick="hideImage(1)">Hide</button>
+          <button onclick="shareImage(1)">Share (<span id="share-count-1">0</span>)</button>
+        </div>
+      </figure>
+
+      <!-- Second image -->
+      <figure id="image-2">
+        <img src="https://shorturl.at/H3HJ9" alt="Image 2 Description">
+        <figcaption>Image 2 Caption</figcaption>
+        <div class="image-actions">
+          <button onclick="likeImage(2)">Like (<span id="like-count-2">0</span>)</button>
+          <button onclick="dislikeImage(2)">Dislike (<span id="dislike-count-2">0</span>)</button>
+          <button onclick="hideImage(2)">Hide</button>
+          <button onclick="shareImage(2)">Share (<span id="share-count-2">0</span>)</button>
+        </div>
+      </figure>
+
+      <!-- Third image -->
+      <figure id="image-3">
+        <img src="https://shorturl.at/OV7NA" alt="Image 3 Description">
+        <figcaption>Image 3 Caption</figcaption>
+        <div class="image-actions">
+          <button onclick="likeImage(3)">Like (<span id="like-count-3">0</span>)</button>
+          <button onclick="dislikeImage(3)">Dislike (<span id="dislike-count-3">0</span>)</button>
+          <button onclick="hideImage(3)">Hide</button>
+          <button onclick="shareImage(3)">Share (<span id="share-count-3">0</span>)</button>
+        </div>
+      </figure>
+    </div>
+
+    <div id="feedback-form">
+      <label for="feedback-category">Feedback Category:</label>
+      <select id="feedback-category"></select>
+
+      <label for="feedback-comment">Comments:</label>
+      <textarea id="feedback-comment" placeholder="Enter your feedback here..."></textarea>
+    </div>
+
+    <!-- Feature request form -->
+    <div id="feature-request-form">
+      <label for="feature-request">Request a new feature:</label>
+      <input type="text" id="feature-request" placeholder="Describe your feature">
+      <button>Submit Feature Request</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>Follow us on:</p>
+    <ul>
+      <li><a href="https://www.instagram.com/wsp._.zay/">Instagram</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Image counters for likes, dislikes, and shares
+    let likeCount = [0, 0, 0];
+    let dislikeCount = [0, 0, 0];
+    let shareCount = [0, 0, 0];
+
+    // Function to update the count
+    function updateCount(imageId, type, countArray, elementIdPrefix) {
+      countArray[imageId - 1]++;
+      document.getElementById(`${elementIdPrefix}${imageId}`).textContent = countArray[imageId - 1];
+    }
+
+    // Function to like an image
+    function likeImage(imageId) {
+      updateCount(imageId, 'like', likeCount, 'like-count-');
+    }
+
+    // Function to dislike an image
+    function dislikeImage(imageId) {
+      updateCount(imageId, 'dislike', dislikeCount, 'dislike-count-');
+    }
+
+    // Function to hide an image
+    function hideImage(imageId) {
+      const imageElement = document.getElementById('image-' + imageId);
+      imageElement.classList.add('hide');
+    }
+
+    // Function to share an image
+    function shareImage(imageId) {
+      const imageUrl = document.querySelector('#image-' + imageId + ' img').src;
+      navigator.clipboard.writeText(imageUrl).then(() => {
+        updateCount(imageId, 'share', shareCount, 'share-count-');
+        alert('Image URL copied to clipboard!');
+      });
+    }
+
+    // Populate feedback form on page load
+    window.onload = function() {
+      const feedbackSelect = document.getElementById('feedback-category');
+      const options = ['General Feedback', 'App Enhancement', 'General Comment'];
+      options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option.toLowerCase().replace(' ', '-');
+        opt.textContent = option;
+        feedbackSelect.appendChild(opt);
+      });
+    };
+  </script>
+
+</body>
+</html>
